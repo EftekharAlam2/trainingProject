@@ -7,7 +7,7 @@ const posts = ref([
     id: 1,
     title: 'Post 1',
     content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-    likes: 3,
+    likes: 0,
     comments: [],
     date: '2024-05-24 11:00:00'
   },
@@ -23,7 +23,7 @@ const posts = ref([
     id: 3,
     title: 'Post 3',
     content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-    likes: 3,
+    likes: 0,
     comments: [],
     date: '2024-05-24 11:00:00'
   }
@@ -56,6 +56,22 @@ function submitData(){
  
   formData.value.title = '';
   formData.value.content = '';
+}
+
+const commentInputs = ref(posts.value.map(() => ''));
+
+function submitComment(index){
+  if (!posts.value[index].comments) {
+    posts.value[index].comments = [];
+  }
+  posts.value[index].comments.push({
+    id: posts.value[index].comments.length + 1,
+    user: userName.value,
+    comment: commentInputs.value[index],
+    date: moment().format('YYYY-MM-DD HH:mm:ss')
+  });
+
+  commentInputs.value[index] = '';
 }
 
 </script>
@@ -132,25 +148,19 @@ function submitData(){
                 <small v-if="post.likes>1"> {{post.likes}} likes</small>
                 <small v-else-if="post.likes==1">{{post.likes}} like</small>
                 <small v-else>No Like</small>
-                <small>, 2 comments</small>
-                </p>
+                <small>, {{ post.comments.length }} comments</small>
+              </p>
 
               <div class="comments mb-3">
                 <div class="comments-input d-flex mb-3">
-                  <input type="text" class="form-control form-control-sm me-2" placeholder="Write Comment">
-                  <button class="btn btn-sm btn-success"><i class="bi bi-send"></i></button>
+                  <input type="text" class="form-control form-control-sm me-2" placeholder="Write Comment" v-model="commentInputs[index]">
+                  <button class="btn btn-sm btn-success" @click="submitComment(index)"><i class="bi bi-send"></i></button>
                 </div>
 
-                <div class="comment mb-3 ms-3">
-                  <h6 class="card-title small">John Doe <span class="text-danger float-end cursor-pointer">X</span></h6>
-                  <p class="card-subtitle mb-1 text-body-secondary small">5 minutes ago</p>
-                  <p class="card-text small">This is a comment.</p>
-                </div>
-                <hr class="my-2 very-low-opacity">
-                <div class="comment mt-3 ms-3">
-                  <h6 class="card-title small">John Doe <span class="text-danger float-end cursor-pointer">X</span></h6>
-                  <p class="card-subtitle mb-1 text-body-secondary small">5 minutes ago</p>
-                  <p class="card-text small">This is a comment.</p>
+                <div class="comment mb-3 ms-3" v-for="comment in post.comments" :key="comment.id">
+                  <h6 class="card-title small"> {{comment.user}} <span class="text-danger float-end cursor-pointer">X</span></h6>
+                  <p class="card-subtitle mb-1 text-body-secondary small"> {{moment(comment.date).fromNow()}} </p>
+                  <p class="card-text small"> {{comment.comment}} </p>
                 </div>
               </div>
 
