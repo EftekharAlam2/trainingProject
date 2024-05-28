@@ -2,35 +2,39 @@
 import { ref } from 'vue';
 // import moment from 'moment';
 
-// const posts = ref([
-//   {
-//     id: 1,
-//     title: 'Post 1',
-//     content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-//     likes: 3,
-//     comments: [],
-//     date: '2024-05-24 11:00:00'
-//   },
-//   {
-//     id: 2,
-//     title: 'Post 2',
-//     content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-//     likes: 3,
-//     comments: [],
-//     date: '2024-05-24 11:00:00'
-//   },
-//   {
-//     id: 3,
-//     title: 'Post 3',
-//     content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-//     likes: 3,
-//     comments: [],
-//     date: '2024-05-24 11:00:00'
-//   }
-// ]);
+const posts = ref([
+  {
+    id: 1,
+    title: 'Post 1',
+    content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
+    likes: 3,
+    comments: [],
+    date: '2024-05-24 11:00:00'
+  },
+  {
+    id: 2,
+    title: 'Post 2',
+    content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
+    likes: 0,
+    comments: [],
+    date: '2024-05-24 11:00:00'
+  },
+  {
+    id: 3,
+    title: 'Post 3',
+    content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
+    likes: 3,
+    comments: [],
+    date: '2024-05-24 11:00:00'
+  }
+]);
 
 const userName = ref('Eftekhar Alam');
-const like = ref(0);
+
+function likeCount(index){
+  posts.value[index].likes++;
+}
+
 </script>
 
 <template>
@@ -95,16 +99,15 @@ const like = ref(0);
       </div>
 
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4" v-for="(post, index) in posts" :key="post.id">
           <div class="card mb-4">
             <div class="card-body">
-              <h5 class="card-title">Post 1</h5>
-              <h6 class="card-subtitle mb-2 text-body-secondary">5 minutes ago</h6>
-              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-                content. This content is a little bit longer.</p>
+              <h5 class="card-title">{{ post.title }}</h5>
+              <h6 class="card-subtitle mb-2 text-body-secondary">{{ post.date }}</h6>
+              <p class="card-text"> {{post.content}} </p>
               <p class="card-text">
-                <small v-if="like>1"> {{like}} likes</small>
-                <small v-else-if="like==1">{{like}} like</small>
+                <small v-if="post.likes>1"> {{post.likes}} likes</small>
+                <small v-else-if="post.likes==1">{{post.likes}} like</small>
                 <small v-else>No Like</small>
                 <small>, 2 comments</small>
                 </p>
@@ -128,33 +131,7 @@ const like = ref(0);
                 </div>
               </div> -->
 
-              <button class="btn btn-sm btn-primary" @click="like++">Like</button>
-              <button class="btn btn-sm btn-danger float-end"><i class="bi bi-trash"></i></button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">Post 2</h5>
-              <h6 class="card-subtitle mb-2 text-body-secondary">5 minutes ago</h6>
-              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-                content. This content is a little bit longer.</p>
-              <p class="card-text"><small>3 likes, 2 comments</small></p>
-              <button class="btn btn-sm btn-primary">Like</button>
-              <button class="btn btn-sm btn-danger float-end"><i class="bi bi-trash"></i></button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">Post 3</h5>
-              <h6 class="card-subtitle mb-2 text-body-secondary">5 minutes ago</h6>
-              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-                content. This content is a little bit longer.</p>
-              <p class="card-text"><small>3 likes, 2 comments</small></p>
-              <button class="btn btn-sm btn-primary">Like</button>
+              <button class="btn btn-sm btn-primary" @click="likeCount(index)">Like</button>
               <button class="btn btn-sm btn-danger float-end"><i class="bi bi-trash"></i></button>
             </div>
           </div>
