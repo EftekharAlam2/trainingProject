@@ -149,7 +149,9 @@ function deleteComment(index, count){
                 <small v-if="post.likes>1"> {{post.likes}} likes</small>
                 <small v-else-if="post.likes==1">{{post.likes}} like</small>
                 <small v-else>No Like</small>
-                <small>, {{ post.comments.length }} comments</small>
+                <small v-if="post.comments.length>1">, {{ post.comments.length }} comments</small>
+                <small v-else-if="post.comments.length==1">, {{ post.comments.length }} comment</small>
+                <small v-else>, No Comment</small>
               </p>
 
               <div class="comments mb-3">
