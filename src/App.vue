@@ -61,9 +61,6 @@ function submitData(){
 const commentInputs = ref(posts.value.map(() => ''));
 
 function submitComment(index){
-  if (!posts.value[index].comments) {
-    posts.value[index].comments = [];
-  }
   posts.value[index].comments.push({
     id: posts.value[index].comments.length + 1,
     user: userName.value,
@@ -72,6 +69,10 @@ function submitComment(index){
   });
 
   commentInputs.value[index] = '';
+}
+
+function deleteComment(index, count){
+  posts.value[index].comments.splice(count, 1);
 }
 
 </script>
@@ -157,8 +158,8 @@ function submitComment(index){
                   <button class="btn btn-sm btn-success" @click="submitComment(index)"><i class="bi bi-send"></i></button>
                 </div>
 
-                <div class="comment mb-3 ms-3" v-for="comment in post.comments" :key="comment.id">
-                  <h6 class="card-title small"> {{comment.user}} <span class="text-danger float-end cursor-pointer">X</span></h6>
+                <div class="comment mb-3 ms-3" v-for="(comment, count) in post.comments" :key="comment.id">
+                  <h6 class="card-title small"> {{comment.user}} <span class="text-danger float-end cursor-pointer" @click="deleteComment(index, count)">X</span></h6>
                   <p class="card-subtitle mb-1 text-body-secondary small"> {{moment(comment.date).fromNow()}} </p>
                   <p class="card-text small"> {{comment.comment}} </p>
                 </div>
