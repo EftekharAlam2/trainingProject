@@ -35,6 +35,10 @@ function likeCount(index){
   posts.value[index].likes++;
 }
 
+function deleteC(index){
+  posts.value.splice(index, 1);
+}
+
 </script>
 
 <template>
@@ -112,7 +116,7 @@ function likeCount(index){
                 <small>, 2 comments</small>
                 </p>
 
-              <!-- <div class="comments mb-3">
+              <div class="comments mb-3">
                 <div class="comments-input d-flex mb-3">
                   <input type="text" class="form-control form-control-sm me-2" placeholder="Write Comment">
                   <button class="btn btn-sm btn-success"><i class="bi bi-send"></i></button>
@@ -129,10 +133,10 @@ function likeCount(index){
                   <p class="card-subtitle mb-1 text-body-secondary small">5 minutes ago</p>
                   <p class="card-text small">This is a comment.</p>
                 </div>
-              </div> -->
+              </div>
 
               <button class="btn btn-sm btn-primary" @click="likeCount(index)">Like</button>
-              <button class="btn btn-sm btn-danger float-end"><i class="bi bi-trash"></i></button>
+              <button class="btn btn-sm btn-danger float-end" @click="deleteC(index)"><i class="bi bi-trash"></i></button>
             </div>
           </div>
         </div>
