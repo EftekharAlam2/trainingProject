@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-// import moment from 'moment';
+import moment from 'moment';
 
 const posts = ref([
   {
@@ -103,7 +103,7 @@ function likeCount(index){
           <div class="card mb-4">
             <div class="card-body">
               <h5 class="card-title">{{ post.title }}</h5>
-              <h6 class="card-subtitle mb-2 text-body-secondary">{{ post.date }}</h6>
+              <h6 class="card-subtitle mb-2 text-body-secondary">{{ moment(post.date).fromNow() }}</h6>
               <p class="card-text"> {{post.content}} </p>
               <p class="card-text">
                 <small v-if="post.likes>1"> {{post.likes}} likes</small>
