@@ -1,5 +1,5 @@
 <script setup>
-// import { ref } from 'vue';
+import { ref } from 'vue';
 // import moment from 'moment';
 
 // const posts = ref([
@@ -28,6 +28,9 @@
 //     date: '2024-05-24 11:00:00'
 //   }
 // ]);
+
+const userName = ref('Eftekhar Alam');
+const like = ref(0);
 </script>
 
 <template>
@@ -50,7 +53,7 @@
         <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              John Doe
+              {{userName}}
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -99,7 +102,12 @@
               <h6 class="card-subtitle mb-2 text-body-secondary">5 minutes ago</h6>
               <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
                 content. This content is a little bit longer.</p>
-              <p class="card-text"><small>3 likes, 2 comments</small></p>
+              <p class="card-text">
+                <small v-if="like>1"> {{like}} likes</small>
+                <small v-else-if="like==1">{{like}} like</small>
+                <small v-else>No Like</small>
+                <small>, 2 comments</small>
+                </p>
 
               <!-- <div class="comments mb-3">
                 <div class="comments-input d-flex mb-3">
@@ -120,7 +128,7 @@
                 </div>
               </div> -->
 
-              <button class="btn btn-sm btn-primary">Like</button>
+              <button class="btn btn-sm btn-primary" @click="like++">Like</button>
               <button class="btn btn-sm btn-danger float-end"><i class="bi bi-trash"></i></button>
             </div>
           </div>
