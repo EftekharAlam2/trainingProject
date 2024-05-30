@@ -9,6 +9,7 @@ const posts = ref([
     content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
     likes: 0,
     comments: [],
+    showing: false,
     date: '2024-05-24 11:00:00'
   },
   {
@@ -17,6 +18,7 @@ const posts = ref([
     content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
     likes: 0,
     comments: [],
+    showing: false,
     date: '2024-05-24 11:00:00'
   },
   {
@@ -25,6 +27,7 @@ const posts = ref([
     content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
     likes: 0,
     comments: [],
+    showing: false,
     date: '2024-05-24 11:00:00'
   }
 ]);
@@ -51,6 +54,7 @@ function submitData(){
     content: formData.value.content,
     likes: 0,
     comments: [],
+    showing: false,
     date: moment().format('YYYY-MM-DD HH:mm:ss')
   });
  
@@ -73,6 +77,10 @@ function submitComment(index){
 
 function deleteComment(index, count){
   posts.value[index].comments.splice(count, 1);
+}
+
+function showingComments(index){
+  posts.value[index].showing = !posts.value[index].showing;
 }
 
 </script>
@@ -149,12 +157,14 @@ function deleteComment(index, count){
                 <small v-if="post.likes>1"> {{post.likes}} likes</small>
                 <small v-else-if="post.likes==1">{{post.likes}} like</small>
                 <small v-else>No Like</small>
-                <small v-if="post.comments.length>1">, {{ post.comments.length }} comments</small>
-                <small v-else-if="post.comments.length==1">, {{ post.comments.length }} comment</small>
-                <small v-else>, No Comment</small>
+                <span @click="showingComments(index)">
+                  <small v-if="post.comments.length>1">, {{ post.comments.length }} comments</small>
+                  <small v-else-if="post.comments.length==1">, {{ post.comments.length }} comment</small>
+                  <small v-else>, No Comment</small>
+                </span>
               </p>
 
-              <div class="comments mb-3">
+              <div class="comments mb-3" v-if="post.showing">
                 <div class="comments-input d-flex mb-3">
                   <input type="text" class="form-control form-control-sm me-2" placeholder="Write Comment" v-model="commentInputs[index]">
                   <button class="btn btn-sm btn-success" @click="submitComment(index)"><i class="bi bi-send"></i></button>
