@@ -9,7 +9,7 @@ const posts = ref([
     content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
     likes: 0,
     comments: [],
-    showing: false,
+    showing: true,
     date: '2024-05-24 11:00:00'
   },
   {
@@ -18,7 +18,7 @@ const posts = ref([
     content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
     likes: 0,
     comments: [],
-    showing: false,
+    showing: true,
     date: '2024-05-24 11:00:00'
   },
   {
@@ -27,7 +27,7 @@ const posts = ref([
     content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
     likes: 0,
     comments: [],
-    showing: false,
+    showing: true,
     date: '2024-05-24 11:00:00'
   }
 ]);
@@ -164,16 +164,18 @@ function showingComments(index){
                 </span>
               </p>
 
-              <div class="comments mb-3" v-if="post.showing">
+              <div class="comments mb-3">
                 <div class="comments-input d-flex mb-3">
                   <input type="text" class="form-control form-control-sm me-2" placeholder="Write Comment" v-model="commentInputs[index]">
                   <button class="btn btn-sm btn-success" @click="submitComment(index)"><i class="bi bi-send"></i></button>
                 </div>
 
-                <div class="comment mb-3 ms-3" v-for="(comment, count) in post.comments" :key="comment.id">
-                  <h6 class="card-title small"> {{comment.user}} <span class="text-danger float-end cursor-pointer" @click="deleteComment(index, count)">X</span></h6>
-                  <p class="card-subtitle mb-1 text-body-secondary small"> {{moment(comment.date).fromNow()}} </p>
-                  <p class="card-text small"> {{comment.comment}} </p>
+                <div v-if="post.showing">
+                  <div class="comment mb-3 ms-3" v-for="(comment, count) in post.comments" :key="comment.id">
+                    <h6 class="card-title small"> {{comment.user}} <span class="text-danger float-end cursor-pointer" @click="deleteComment(index, count)">X</span></h6>
+                    <p class="card-subtitle mb-1 text-body-secondary small"> {{moment(comment.date).fromNow()}} </p>
+                    <p class="card-text small"> {{comment.comment}} </p>
+                  </div>
                 </div>
               </div>
 
