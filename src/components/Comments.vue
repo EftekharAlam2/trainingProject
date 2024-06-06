@@ -22,8 +22,8 @@ const emit = defineEmits({
         </div>
 
         <div v-if="post.showing">
-        <div class="comment mb-3 ms-3" v-for="(comment, count) in post.comments" :key="comment.id">
-            <h6 class="card-title small"> {{comment.user}} <span class="text-danger float-end cursor-pointer" @click="emit('deleteComment', index, count)">X</span></h6>
+        <div class="comment mb-3 ms-3" v-for="(comment, count) in [...post.comments].reverse()" :key="comment.id">
+            <h6 class="card-title small"> {{comment.user}} <span class="text-danger float-end cursor-pointer" @click="emit('deleteComment', index, post.comments.length - 1 - count)">X</span></h6>
             <p class="card-subtitle mb-1 text-body-secondary small"> {{moment(comment.date).fromNow()}} </p>
             <p class="card-text small"> {{comment.comment}} </p>
         </div>

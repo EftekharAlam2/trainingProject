@@ -37,14 +37,16 @@ const emit = defineEmits({
                 <p class="card-text"> {{post.content}} </p>
                 <p class="card-text">
                     <span :style="{ color: post.likes >= 10 ? 'green' : 'black' }">
-                    <small v-if="post.likes>1"> {{post.likes}} likes</small>
-                    <small v-else-if="post.likes==1">{{post.likes}} like</small>
-                    <small v-else>No Like</small>
+                        <small v-if="post.likes>1"> {{post.likes}} likes</small>
+                        <small v-else-if="post.likes==1">{{post.likes}} like</small>
+                        <small v-else>No Like</small>
                     </span>
                     <span @click="emit('showingComments', (reversePosts.length - (index+1)))">
-                    <small v-if="post.comments.length>1">, {{ post.comments.length }} comments</small>
-                    <small v-else-if="post.comments.length==1">, {{ post.comments.length }} comment</small>
-                    <small v-else>, No Comment</small>
+                    <span :style="{ color: post.comments.length >= 3 ? 'green' : 'black' }">
+                        <small v-if="post.comments.length>1">, {{ post.comments.length }} comments</small>
+                        <small v-else-if="post.comments.length==1">, {{ post.comments.length }} comment</small>
+                        <small v-else>, No Comment</small>
+                    </span>
                     </span>
                 </p>
 
@@ -53,7 +55,7 @@ const emit = defineEmits({
                     :index="reversePosts.length - (index + 1)"
                     :commentInputs="commentInputs"
                     @submitComment="(...args) => emit('submitComment', ...args)"
-  @deleteComment="(...args) => emit('deleteComment', ...args)"
+                    @deleteComment="(...args) => emit('deleteComment', ...args)"
                 />
 
                 <button class="btn btn-sm btn-primary" @click="emit('likeCount', (reversePosts.length - (index+1)))">Like</button>

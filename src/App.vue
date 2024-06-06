@@ -112,6 +112,20 @@ watch(
   { deep: true}
 )
 
+watch(
+  () => posts.value.map(post => post.comments.length),
+  (newComments, oldComments) => {
+    posts.value.forEach((post, index) => {
+      if (newComments[index] === 3 && !post.commentsConfirmation) {
+        post.commentsConfirmation = true;
+        alert('Congratulations!! You have got three comments.');
+      }
+    });
+  },
+  { deep: true }
+);
+``
+
 </script>
 
 <template>
