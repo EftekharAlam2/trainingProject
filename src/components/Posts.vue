@@ -1,6 +1,7 @@
 <script setup>
 import { ref, defineProps, computed, defineEmits } from 'vue';
 import moment from 'moment';
+import Comments from './Comments.vue'
 
 const props = defineProps(['posts', 'commentInputs']);
 const posts = ref(props.posts);
@@ -47,20 +48,13 @@ const emit = defineEmits({
                     </span>
                 </p>
 
-                <div class="comments mb-3">
-                    <div class="comments-input d-flex mb-3">
-                    <input type="text" class="form-control form-control-sm me-2" placeholder="Write Comment" v-model="commentInputs[reversePosts.length - (index+1)]">
-                    <button class="btn btn-sm btn-success" @click="emit('submitComment', (reversePosts.length - (index+1)))"><i class="bi bi-send"></i></button>
-                    </div>
-
-                    <div v-if="post.showing">
-                    <div class="comment mb-3 ms-3" v-for="(comment, count) in post.comments" :key="comment.id">
-                        <h6 class="card-title small"> {{comment.user}} <span class="text-danger float-end cursor-pointer" @click="emit('deleteComment', (reversePosts.length - (index+1)), count)">X</span></h6>
-                        <p class="card-subtitle mb-1 text-body-secondary small"> {{moment(comment.date).fromNow()}} </p>
-                        <p class="card-text small"> {{comment.comment}} </p>
-                    </div>
-                    </div>
-                </div>
+                <Comments 
+                    :post="post"
+                    :index="reversePosts.length - (index + 1)"
+                    :commentInputs="commentInputs"
+                    @submitComment="(...args) => emit('submitComment', ...args)"
+  @deleteComment="(...args) => emit('deleteComment', ...args)"
+                />
 
                 <button class="btn btn-sm btn-primary" @click="emit('likeCount', (reversePosts.length - (index+1)))">Like</button>
                 <button class="btn btn-sm btn-danger float-end" @click="emit('deleteC', (reversePosts.length - (index+1)))"><i class="bi bi-trash"></i></button>
