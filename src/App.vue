@@ -175,7 +175,7 @@ watch(
   <div class="posts mt-4">
     <div class="container">
       <div class="nav nav-tabs mb-4">
-        <h3>Posts</h3>
+        <h3>Posts <span :class="{ 'text-danger' :  posts.length <= 0 }">{{ posts.length }}</span></h3>
       </div>
 
       <div class="row">
@@ -186,9 +186,11 @@ watch(
               <h6 class="card-subtitle mb-2 text-body-secondary">{{ moment(post.date).fromNow() }}</h6>
               <p class="card-text"> {{post.content}} </p>
               <p class="card-text">
-                <small v-if="post.likes>1"> {{post.likes}} likes</small>
-                <small v-else-if="post.likes==1">{{post.likes}} like</small>
-                <small v-else>No Like</small>
+                <span :style="{ color: post.likes >= 10 ? 'green' : 'black' }">
+                  <small v-if="post.likes>1"> {{post.likes}} likes</small>
+                  <small v-else-if="post.likes==1">{{post.likes}} like</small>
+                  <small v-else>No Like</small>
+                </span>
                 <span @click="showingComments(reversePosts.length - (index+1))">
                   <small v-if="post.comments.length>1">, {{ post.comments.length }} comments</small>
                   <small v-else-if="post.comments.length==1">, {{ post.comments.length }} comment</small>
