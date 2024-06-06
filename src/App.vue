@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import moment from 'moment';
 
 const posts = ref([
@@ -91,6 +91,29 @@ function deleteComment(index, count){
 function showingComments(index){
   posts.value[index].showing = !posts.value[index].showing;
 }
+
+watch(
+  () => posts.value.length,
+  (newValue, oldValue) => {
+    if(newValue > oldValue){
+      alert('A new post has been created');
+    }
+  },
+  { immediate: true }
+)
+
+watch(
+  () => posts.value,
+  () => {
+    posts.value.forEach(post => {
+      if(post.likes === 10 && !post.likeConfirmation){
+        post.likeConfirmation = true;
+        alert('This post has been reached 10 likes');
+      }
+    })
+  },
+  { deep: true}
+)
 
 </script>
 
