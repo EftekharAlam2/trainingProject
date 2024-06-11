@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue';
 import moment from 'moment';
 import Posts from './components/Posts.vue';
+import CreatePost from './components/CreatePost.vue';
 
 const posts = ref([
   {
@@ -48,24 +49,8 @@ function deleteC(index){
   posts.value.splice(index, 1);
 }
 
-const formData = ref({
-  title: '',
-  content: ''
-})
-
-function submitData(){
-  posts.value.push({
-    id: posts.value.length + 1,
-    title: formData.value.title,
-    content: formData.value.content,
-    likes: 0,
-    comments: [],
-    showing: false,
-    date: moment().format('YYYY-MM-DD HH:mm:ss')
-  });
- 
-  formData.value.title = '';
-  formData.value.content = '';
+function submitData(post){
+  posts.value.push(post);
 }
 
 const commentInputs = ref(posts.value.map(() => ''));
@@ -160,28 +145,7 @@ watch(
     </div>
   </nav>
 
-  <div class="container mt-4">
-    <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Create a New Post</h5>
-            <form @submit.prevent="submitData()">
-              <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" placeholder="Enter the title" v-model="formData.title">
-              </div>
-              <div class="mb-3">
-                <label for="content" class="form-label">Content</label>
-                <textarea class="form-control" id="content" rows="3" placeholder="Enter the content" v-model="formData.content"></textarea>
-              </div>
-              <button type="submit" class="btn btn-success">Submit</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <CreatePost @submitData="submitData" :postCount="posts.length" />
 
   <Posts :posts="posts"
     :commentInputs="commentInputs"
