@@ -1,7 +1,7 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
-import moment from 'moment';
-import Posts from './components/Posts.vue';
+import { ref, computed, watch, provide } from 'vue'
+import moment from 'moment'
+import Posts from './components/Posts.vue'
 import CreatePost from './components/CreatePost.vue';
 import LayoutContent from './components/LayoutContent.vue';
 
@@ -9,77 +9,81 @@ const posts = ref([
   {
     id: 1,
     title: 'Post 1',
-    content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
+    content:
+      'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
     likes: 0,
     comments: [],
-    showing: true,
-    date: '2024-05-24 11:00:00'
+    date: '2024-05-24 11:00:00',
+    commentFormData: '',
+    showCommentSection: false
   },
   {
     id: 2,
     title: 'Post 2',
-    content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
+    content:
+      'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
     likes: 0,
     comments: [],
-    showing: true,
-    date: '2024-05-24 11:00:00'
+    date: '2024-05-24 11:00:00',
+    commentFormData: '',
+    showCommentSection: false
   },
   {
     id: 3,
     title: 'Post 3',
-    content: 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
+    content:
+      'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
     likes: 0,
     comments: [],
-    showing: true,
-    date: '2024-05-24 11:00:00'
+    date: '2024-05-24 11:00:00',
+    commentFormData: '',
+    showCommentSection: false
   }
-]);
+])
 
-const firstName = "Eftekhar";
-const lastName = "Alam";
+const firstName = 'John'
+const lastName = 'Doe'
+
 const userName = computed(() => {
-  return firstName + " " + lastName;
+  return firstName + ' ' + lastName
 })
-// const userName = ref('Eftekhar Alam');
+// const userName = ref('Asif Mallik');
 
-function likeCount(index){
-  posts.value[index].likes++;
+function increaseLikeCount(index) {
+  posts.value[index].likes++
 }
 
-function deleteC(index){
-  posts.value.splice(index, 1);
+function deletePost(index) {
+  posts.value.splice(index, 1)
 }
 
-function submitData(post){
+// function postCreate(event) {
+//   event.preventDefault();
+function postCreate(post) {
   posts.value.push(post);
 }
 
-const commentInputs = ref(posts.value.map(() => ''));
-
-function submitComment(index){
+function addComment(index) {
   posts.value[index].comments.push({
     id: posts.value[index].comments.length + 1,
-    user: userName.value,
-    comment: commentInputs.value[index],
+    userName: userName.value,
+    content: posts.value[index].commentFormData,
     date: moment().format('YYYY-MM-DD HH:mm:ss')
-  });
+  })
 
-  commentInputs.value[index] = '';
+  posts.value[index].commentFormData = ''
+  posts.value[index].showCommentSection = true
 }
 
-function deleteComment(index, count){
-  posts.value[index].comments.splice(count, 1);
-}
-
-function showingComments(index){
-  posts.value[index].showing = !posts.value[index].showing;
+function deleteComment(postIndex, commentIndex) {
+  posts.value[postIndex].comments.splice(commentIndex, 1)
 }
 
 watch(
   () => posts.value.length,
   (newValue, oldValue) => {
-    if(newValue > oldValue){
-      alert('A new post has been created');
+    if (newValue > oldValue) {
+      alert('A new post has been created!')
     }
   },
   { immediate: true }
@@ -88,48 +92,31 @@ watch(
 watch(
   () => posts.value,
   () => {
-    posts.value.forEach(post => {
-      if(post.likes === 10 && !post.likeConfirmation){
-        post.likeConfirmation = true;
-        alert('This post has been reached 10 likes');
+    posts.value.forEach((post) => {
+      if (post.likes === 10 && !post.likeConfirmation) {
+        post.likeConfirmation = true
+        alert('A post has reached 10 likes!')
       }
     })
   },
-  { deep: true}
+  { deep: true }
 )
 
-watch(
-  () => posts.value.map(post => post.comments.length),
-  (newComments, oldComments) => {
-    posts.value.forEach((post, index) => {
-      if (newComments[index] === 3 && !post.commentsConfirmation) {
-        post.commentsConfirmation = true;
-        alert('Congratulations!! You have got three comments.');
-      }
-    });
-  },
-  { deep: true }
-);
-``
+provide('posts', posts);
 
+const currentComp = ref('posts');
 </script>
 
 <template>
-  <LayoutContent :userName="userName">
-    <CreatePost @submitData="submitData" :postCount="posts.length" />
-
-    <Posts :posts="posts"
-      :commentInputs="commentInputs"
-      @likeCount="likeCount"
-      @submitComment="submitComment"
-      @deleteComment="deleteComment"
-      @deleteC="deleteC"
-      @showingComments="showingComments"
-    />
-  </LayoutContent>  
+  <LayoutContent :userName="userName" @changeComp="(comp) => currentComp = comp" :currentComp="currentComp">
+    <CreatePost v-if="currentComp == 'create-post'" @postCreate="postCreate" :postCount="posts.length"
+      class="bg-light p-4" style="border-radius: 5px;" />
+    <Posts v-else-if="currentComp == 'posts'" @increaseLikeCount="increaseLikeCount" @deletePost="deletePost"
+      @addComment="addComment" @deleteComment="deleteComment" />
+  </LayoutContent>
 </template>
 
-<style scoped>
+<style>
 .cursor-pointer {
   cursor: pointer;
 }

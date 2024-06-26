@@ -11,4 +11,6 @@ const app = createApp(App)
 
 app.use(router)
 
+app.provide('userName', 'Asif Mallik')
+
 app.mount('#app')
