@@ -4,42 +4,12 @@ import moment from 'moment'
 import Posts from './components/Posts.vue'
 import CreatePost from './components/CreatePost.vue';
 import LayoutContent from './components/LayoutContent.vue';
+import { useStore } from 'vuex';
 
-const posts = ref([
-  {
-    id: 1,
-    title: 'Post 1',
-    content:
-      'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-    likes: 0,
-    comments: [],
-    date: '2024-05-24 11:00:00',
-    commentFormData: '',
-    showCommentSection: false
-  },
-  {
-    id: 2,
-    title: 'Post 2',
-    content:
-      'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-    likes: 0,
-    comments: [],
-    date: '2024-05-24 11:00:00',
-    commentFormData: '',
-    showCommentSection: false
-  },
-  {
-    id: 3,
-    title: 'Post 3',
-    content:
-      'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-    likes: 0,
-    comments: [],
-    date: '2024-05-24 11:00:00',
-    commentFormData: '',
-    showCommentSection: false
-  }
-])
+const store = useStore();
+
+// const posts = ref(store.state.posts);
+const posts = ref(store.getters.getPosts);
 
 const firstName = 'John'
 const lastName = 'Doe'
